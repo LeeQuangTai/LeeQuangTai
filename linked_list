@@ -1,0 +1,219 @@
+#include<iostream>
+#include<conio.h>
+using namespace std; 
+
+struct node
+{
+	int data; 
+	node* link;
+};
+struct linked_list
+{
+	node* head, * tail;
+};
+
+// init 1 node
+node* create_node(const int &x)
+{
+	node* p = new node; 
+	p->data = x; 
+	p->link = NULL; 
+	return p;
+}
+// created a NULL linked list
+void create_linked_list(linked_list& list)
+{
+	list.head = list.tail = NULL;
+}
+
+void print_list(const linked_list &list)
+{
+	for (node* p = list.head; p != NULL; p = p-> link)
+	{
+		cout << p->data << "\t";
+	}
+}
+
+void print_even_num(const linked_list &list)
+{
+	for (node* p = list.head; p != NULL; p = p->link)
+	{
+		if (p ->data % 2 == 0)
+			cout << p->data << "\t";
+	}
+}
+int findX(const linked_list &list, const int &x)
+{
+	int count = 0;
+	for (node* p = list.head; p != NULL; p = p->link)
+	{
+		if (p->data == x) count++; 
+	}
+	return count; 
+}
+void add_head(linked_list& list,  node* node)
+{
+	if (list.head == NULL)
+	{
+		list.head = list.tail = node;
+	}
+	else
+	{
+		node->link = list.head;
+		list.head = node; 
+	}
+}
+void add_tail(linked_list& list, node* node)
+{
+	if (list.head == NULL)
+	{
+		list.head = list.tail = node;
+	}
+	else
+	{
+		list.tail->link = node; 
+		list.tail = node;
+	}
+}
+int del_head(linked_list& list, int& x)
+{
+	if (list.head == list.tail)
+	{
+		create_linked_list(list);
+		return 0; 
+	}
+	else
+	{
+		node* p = list.head; 
+		x = p->data; 
+		list.head = p->link;
+		delete p; 
+		return 0;
+	}
+	return -1;
+}
+int del_tail(linked_list& list)
+{
+	if (list.head == list.tail)
+	{
+		create_linked_list(list);
+		return 0;
+	}
+	else
+	{
+		node* p;
+		for (p = list.head; p->link->link != NULL; p = p->link);
+		node* temp = p->link; 
+		p->link = NULL; 
+		delete temp;
+		temp = NULL;
+		return 0;
+	}
+	return -1;
+}
+
+void choice(linked_list& list)
+{
+	int choice; 
+	bool check = 0; 
+	do {
+		system("cls");
+		cout << "===================MENU===================\n\a"
+			<< "1. Init linked list.\n2. Print linked list\n"
+			<< "3. Print even number in the linked list\n"
+			<< "4. Find a valua in the linked list\n"
+			<< "5. Add node into the front of the list\n"
+			<< "6. Add node into the last of the list\n"
+			<< "7. Delete the first node\n" << "8. Delete the last node\n"
+			<< "9. Exit\n\n\Your choice:  ";
+		cin >> choice;
+		cout << "=========================================\n";
+		switch (choice)
+		{
+		case 1:
+			create_linked_list(list);
+			check = 1; _getch(); break;
+		case 2:
+			if (check)
+			{
+				cout << "The linked list:\n";
+				print_list(list);
+			}
+			else cout << "Back to the menu to init the linked list\n";
+			_getch(); break;
+		case 3:
+			if (check)
+			{
+				cout << "The list of even number:\n";
+				print_even_num(list);
+			}
+			else cout << "Back to the menu to init the linked list!\n";
+			_getch(); break;
+		case 4:
+			if (check)
+			{
+				cout << "Insert the value: "; int x; cin >> x;
+				cout << "We have " << findX(list, x) << " values in the list!\n";
+			}
+			else cout << "Back to the menu to init the linked list!\n";
+			_getch(); break;
+		case 5:
+			if (check)
+			{
+				cout << "Insert the number of value: "; int n; cin >> n;
+				for (int i = 1; i <= n; i++)
+				{
+					cout << "Insert for the " << i << "th value: "; int x; cin >> x;
+					add_head(list, create_node(x));
+				}
+			}
+			else cout << "Back to the menu to init the linked list!\n";
+			_getch(); break;
+		case 6:
+			if (check)
+			{
+				cout << "Insert the number of value: "; int n; cin >> n;
+				for (int i = 1; i <= n; i++)
+				{
+					cout << "Insert for the " << i << "th value: "; int x; cin >> x;
+					add_tail(list, create_node(x));
+				}
+			}
+			else cout << "Back to the menu to init the linked list!\n";
+			_getch(); break;
+		case 7:
+			if (check)
+			{
+				int x;
+				if (del_head(list, x) == 0)
+				{
+					cout << "Deleted!\n";
+				}
+				else cout << "Can't delete the value!\n";
+			}
+			else cout << "Back to the menu to init the linked list!\n";
+			_getch(); break;
+		case 8:
+			if (check)
+			{
+				int x;
+				if (del_tail(list) == 0)
+				{
+					cout << "Deleted!\n";
+				}
+				else cout << "Can't delete the value!\n";
+			}
+			else cout << "Back to the menu to init the linked list!\n";
+			_getch(); break;
+		default:
+			break;
+		}
+	}
+	while (choice > 0 && choice < 9);
+}
+
+int main()
+{
+	linked_list list;
+	choice(list); 
+}
