@@ -112,6 +112,40 @@ int del_tail(linked_list& list)
 	return -1;
 }
 
+int length_list(const linked_list& list)
+{
+	int count = 0;
+	for (node* p = list.head; p->link != NULL; p = p->link)
+		count++; 
+	return count;
+}
+int add_node_position(linked_list& list, node* Node, int position)
+{
+	int count = 1;
+	node* p;
+	for (p = list.head; p->link != NULL; p = p->link)
+		if (count == position - 1)
+			break;
+		else count++;
+	if (position == 1)
+	{
+		add_head(list, Node); 
+		return 0;
+	}
+	else if (position == length_list(list) + 1)
+	{
+		add_tail(list,Node);
+		return 0; 
+	}
+	else
+	{
+		Node->link = p->link;
+		p->link = Node;
+		return 0;
+	}
+	return -1;
+	
+}
 void choice(linked_list& list)
 {
 	int choice; 
@@ -125,13 +159,15 @@ void choice(linked_list& list)
 			<< "5. Add node into the front of the list\n"
 			<< "6. Add node into the last of the list\n"
 			<< "7. Delete the first node\n" << "8. Delete the last node\n"
-			<< "9. Exit\n\n\Your choice:  ";
+			<< "9. Add a node with a position in the list\n"
+			<< "10. Exit\n\n\Your choice:  ";
 		cin >> choice;
 		cout << "=========================================\n";
 		switch (choice)
 		{
 		case 1:
 			create_linked_list(list);
+			cout << "Inited!";
 			check = 1; _getch(); break;
 		case 2:
 			if (check)
@@ -196,7 +232,6 @@ void choice(linked_list& list)
 		case 8:
 			if (check)
 			{
-				int x;
 				if (del_tail(list) == 0)
 				{
 					cout << "Deleted!\n";
@@ -205,11 +240,25 @@ void choice(linked_list& list)
 			}
 			else cout << "Back to the menu to init the linked list!\n";
 			_getch(); break;
+		case 9:
+			if (check)
+			{
+				int position;
+				do {
+					cout << "Insert the position: ";  cin >> position;
+					if (position > length_list(list) + 1)
+						cout << "The position is not available! Please try again!\n";
+				} while (position > length_list(list) + 1);
+				cout << "Insert the value in the node: "; int x; cin >> x; 
+				add_node_position(list, create_node(x), position);
+			}
+			else cout << "Back to the menu to init the linked list!\n";
+			_getch(); break;
 		default:
 			break;
 		}
 	}
-	while (choice > 0 && choice < 9);
+	while (choice > 0 && choice < 10);
 }
 
 int main()
